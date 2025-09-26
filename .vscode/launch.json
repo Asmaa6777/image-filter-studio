@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/Family/Desktop/CS213-2025-2026-Assignemnt1-LibraryAndExample/CS213-2025-2026-Assignemnt1-LibraryAndExample",
+      "program": "c:/Users/Family/Desktop/CS213-2025-2026-Assignemnt1-LibraryAndExample/CS213-2025-2026-Assignemnt1-LibraryAndExample/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
