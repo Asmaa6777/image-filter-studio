@@ -1,3 +1,5 @@
+// A demo for converting image to gray scale
+
 #include <iostream>
 using namespace std;
 #include "Image_Class.h"
@@ -10,20 +12,16 @@ int main() {
     Image image(filename);
 
     for (int i = 0; i < image.width; ++i) {
-        for (int j = 0; j < image.height; ++j) {
-            unsigned  int avg = 0; 
-
+        for (int j = 0; j < image.height; ++j) 
             for (int k = 0; k < 3; ++k) {
-                avg += image(i, j, k); 
-            }
-
-            avg /= 3; 
-            
-            image(i, j, 0) = avg;
-            image(i, j, 1) = avg;
-            image(i, j, 2) = avg;
+                for (int b; b< 3 ; b++ ){
+                int avg += image(i,j,k) ; 
+                }
+                avg /= 3;
+                image(i, j, k) = avg;
+            } 
         }
-    }
+    
 
     cout << "Pls enter image name to store new image\n";
     cout << "and specify extension .jpg, .bmp, .png, .tga: ";
