@@ -1,3 +1,13 @@
+/** OOP Assignment 1 Phase 1
+ * FCAI Cairo University
+ * contains the menu for filters ,image loading and saving options,
+ * Course Instroctor : Dr Mohamed El-Ramely ,
+ * @date : 30/9/2025
+ * Mariam Sherif - 20240789 (filters 1,4)
+ * Arwa Bashier -20243065 (filters 2,5)
+ * Asmaa Farouq - 20243081 (filters 3,6)
+ */
+
 #include <iostream>
 using namespace std;
 #include "Image_Class.h" 
