@@ -3,7 +3,7 @@
  * contains the menu for filters ,image loading and saving options,
  * Course Instroctor : Dr Mohamed El-Ramely ,
  * @date : 30/9/2025
- * Mariam Sherif - 20240789 (filters 1,4)
+ * Mariam Sherif - 20240789 (filters 1,7)
  * Arwa Bashier -20243065 (filters 2,5)
  * Asmaa Farouq - 20243081 (filters 3,6)
  */
@@ -12,62 +12,7 @@
 using namespace std;
 #include "Image_Class.h" 
 #include <cctype>
-
-//functions for filters 
-// grayscale funcyion
-void grayscale(Image &image,string &filename){
-    for (int i = 0; i < image.width; ++i) {
-        for (int j = 0; j < image.height; ++j) {
-            unsigned  int avg = 0;  
-            for (int k = 0; k < 3; ++k) {
-                avg += image(i, j, k);  
-            }
-
-            avg /= 3; 
-            image(i, j, 0) = avg;
-            image(i, j, 1) = avg;
-            image(i, j, 2) = avg;
-        }
-    }
-    cout << "Pls enter image name to store new image\n";
-    cout << "and specify extension .jpg, .bmp, .png, .tga: ";
-
-    cin >> filename;
-    image.saveImage(filename);
-}
-
-    // Black & white function
-    void BlackandWhite(Image &image,string &filename){
-    long long sum=0;
-    for (int x = 0; x < image.width; x++) {
-        for (int y = 0; y < image.height; y++) {
-          int gray = (image(x, y, 0)+image(x, y, 1) + image(x, y, 2))/3;
-          sum +=gray;   
-        }
-   
-    }
-      int midpoint = sum/(image.width*image.height);
-    for (int x = 0; x < image.width; x++) {
-        for (int y = 0; y < image.height; y++) {
-        int gray =(image(x, y, 0) +image(x, y, 1) +image(x, y, 2))/3;
-        if (gray >=midpoint) {
-        image(x, y, 0) = 255;
-        image(x, y, 1) = 255;
-        image(x, y, 2)=255;
-        }
-        else {
-        image(x, y, 0) = 0;
-        image(x, y, 1) = 0;
-        image(x, y, 2)=0; 
-        }
-    }
-  } 
-    cout << "Pls enter image name to store new image\n";
-    cout << "and specify extension .jpg, .bmp, .png, .tga: ";
-
-    cin >> filename;
-    image.saveImage(filename);
-}
+#include "filters.h"
 
 int main(){
 string current;
@@ -75,15 +20,17 @@ string current;
  cin >> current;
  Image image(current);
  bool running=true;
- while (running){
- cout << "Please choose one of the following options by entering the corresponding number\n";
- cout <<"1- Load a new image\n2- Save current image\n3- Filter 1 // Gray scale conversion\n";
- cout <<"4- Filter 2 // Black & White\n5- Filter 3 // Invert Filter\n";
- cout <<"6- Filter 4 // Merge Images\n7- Filter 5 // Flip Images\n";
- cout <<"8- Filter 6 // Rotate Image\n9- Exit\n" ;
- int choice;
- cin >> choice;
- switch (choice)
+
+  while (running) {
+    cout << "\nPlease choose one of the following options by entering the corresponding number\n";
+    cout << "1- Load a new image\n2- Save current image\n3- Filter 1 // Gray scale conversion\n";
+    cout << "4- Filter 2 // Black & White\n5- Filter 3 // Invert Filter\n";
+    cout << "6- Filter 4 // Darken and Lighten Image\n7- Filter 5 // Flip Images\n";
+    cout << "8- Filter 6 // Rotate\n9- Exit\n";
+
+        int choice;
+        cin >> choice;
+        switch (choice)
  {
  case 1:{
    cout <<"Do you want to save the current? enter yes or no\n";
@@ -98,46 +45,60 @@ string current;
    cout <<"enter new image's name to load\n";
    string newfile;
    cin>>newfile;
-   Image image(newfile);
-   break;
- }
- case 2:{
+  image = Image(newfile);
+   break;}
+
+  case 2:{
    image.saveImage(current);
    cout <<"Image saved in"<< current;
-   break;
- }
-  case 3:{
+   break;}
+
+   case 3:{
    grayscale(image,current);
-   break;
- }
+   break;}
+
    case 4:{
     BlackandWhite(image,current);
-   break;
- }
-   case 6:{
+   break;}
 
-   break;
- }
+   case 5:{
+    invert_image(image,current);
+   break;}
+
+   case 6:{
+    cout <<"Do you want to darken or lighten the image? enter darken or lighten\n";
+    string s;
+    cin >>s;
+    Darken_Lighten_Image(image,current, s);
+   break;}
+
    case 7:{
-    
-   break;
- }
+    cout<<"Do you want to flip the image horizontally or vertically?0 = horizontal, 1 = vertical\n";
+    int s;
+    cin >>s;
+    flip_image(image,current, s);
+    break;}
+
    case 8:{
-    
-   break;
- }
+    cout<<"Do you want to rotate the image 90/180/270?\n";
+    int angle;
+    cin >>angle;
+    rotate_image(image,current, angle);
+   break;}
+
    case 9:{
-    cout <<"Do you want to save the current  image before you exit? enter yes or no\n";
+    cout <<"Do you want to save the current image before you exit? enter yes or no\n";
     string s;
     cin >>s; 
-    for (char &c:s) c=tolower(c);
-    if(s =="yes") {
+    if (s == "yes"){
+    cout << "Pls enter image name to store new image\n";
+    cout << "and specify extension .jpg, .bmp, .png, .tga: ";
     image.saveImage(current);
     cout <<"Image saved in"<< current<<endl;
     running=false;
-   }
-   break;
- }
+    }
+    running=false;
+   break;}
  
  default:
     break;

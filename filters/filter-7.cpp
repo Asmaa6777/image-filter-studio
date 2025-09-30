@@ -3,7 +3,7 @@ using namespace std;
 #include "Image_Class.h"
 
 
-int main() {
+/*int main() {
     string filename, answer;
     cout << "Pls enter colored image name to adjust the brightness of: " << endl;
     cin >> filename;
@@ -42,4 +42,37 @@ int main() {
     image.saveImage(filename);
 
     return 0;
+}*/
+
+void Darken_Lighten_Image(Image &image,string &filename,string answer){
+    if(answer=="brighter"){
+    for (int i = 0; i < image.width; ++i) {
+        for (int j = 0; j < image.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                image(i,j,k)= 1.5 * image(i,j,k);
+                if (image (i,j,k)>255){
+                    image(i,j,k)=255; }
+                }
+               
+               }
+            }      
+        } 
+    else if(answer=="darker"){
+        for (int i = 0; i < image.width; ++i) {
+        for (int j = 0; j < image.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                image(i,j,k)= 0.5 * image(i,j,k);
+                if (image (i,j,k)<0){
+                    image(i,j,k)=0; }
+                
+               }
+            }      
+        }
+    }
+
+    cout << "Pls enter image name to store new image\n";
+    cout << "and specify extension .jpg, .bmp, .png, .tga: ";
+
+    cin >> filename;
+    image.saveImage(filename);
 }

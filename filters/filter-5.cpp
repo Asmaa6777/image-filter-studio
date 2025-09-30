@@ -2,7 +2,7 @@
 using namespace std;
 #include "Image_Class.h"
 
-int main() {
+/*int main() {
     string filename;
     int choice;  
     cout << "Please enter image name to flip: ";
@@ -45,4 +45,32 @@ int main() {
     
     flipped.saveImage(filename);
     return 0;
+} */
+
+void flip_image(Image &image,string &filename,int type){
+    Image flipped(image.width, image.height);
+    if (type ==1){
+    for (int i = 0; i < image.width/2; i++) {
+      for (int j = 0; j < image.height; j++) {
+         for (int k = 0; k < 3; ++k) {
+         flipped(i,j,k) = image(image.width-1-i,j,k);
+         flipped(image.width-1-i,j,k)=image(i,j,k);
+      }
+    }}
+    }
+    else if (type == 2) {
+          for (int i = 0; i < image.width; ++i) {
+            for (int j = 0; j < image.height/2; ++j) {
+                for (int k = 0; k < 3; ++k) {
+                flipped(i,j,k) = image(i,image.height-1-j,k);
+                flipped(i,image.height-j-1,k)=image(i,j,k);  
+                }
+            }
+        }
+    }
+    cout << "Pls enter image name to store new flipped image\n";
+    cout << "and specify extension .jpg, .bmp, .png, .tga: ";
+    cin >> filename;
+    
+    flipped.saveImage(filename);
 }
