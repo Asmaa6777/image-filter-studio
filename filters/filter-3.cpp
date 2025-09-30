@@ -1,4 +1,4 @@
-// A demo for converting image to gray scale
+
 
 #include <iostream>
 using namespace std;
