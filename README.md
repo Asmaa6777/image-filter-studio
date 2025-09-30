@@ -96,5 +96,5 @@ The program structure is modular. Each filter is its own function.
 ## 👥 Team
 
 * Asmaa Farouq 
-* Arwaa Bashir 
-* Mariam
+* Arwaa Bashir  
+* Mariam Sherif
