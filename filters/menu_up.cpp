@@ -99,55 +99,64 @@ void Darken_Lighten_Image(Image &image,string &filename,string answer){
     }
 }
   
-// filter 5 : flip images 
-
-void flip_image(Image &image,string &filename,int type){
+// Filter 5: flip images 
+void flip_image(Image &image, string &filename, int type) {
     Image flipped(image.width, image.height);
-    if (type ==1){
-    for (int i = 0; i < image.width/2; i++) {
-      for (int j = 0; j < image.height; j++) {
-         for (int k = 0; k < 3; ++k) {
-         flipped(i,j,k) = image(image.width-1-i,j,k);
-         flipped(image.width-1-i,j,k)=image(i,j,k);
-      }
-    }}
-    }
-    else if (type == 2) {
-          for (int i = 0; i < image.width; ++i) {
-            for (int j = 0; j < image.height/2; ++j) {
-                for (int k = 0; k < 3; ++k) {
-                flipped(i,j,k) = image(i,image.height-1-j,k);
-                flipped(i,image.height-j-1,k)=image(i,j,k);  
+    
+    if (type == 1) { 
+        for (int i = 0; i < image.width; i++) {
+            for (int j = 0; j < image.height; j++) {
+                for (int k = 0; k < 3; k++) {
+                    flipped(i, j, k) = image(image.width - 1 - i, j, k);
                 }
             }
         }
-    }}
+    } 
+    else if (type == 2) { 
+        for (int i = 0; i < image.width; i++) {
+            for (int j = 0; j < image.height; j++) {
+                for (int k = 0; k < 3; k++) {
+                    flipped(i, j, k) = image(i, image.height - 1 - j, k);
+                }
+            }
+        }
+    }
+    
+    // Copy flipped image back to original
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            for (int k = 0; k < 3; k++) {
+                image(i, j, k) = flipped(i, j, k);
+            }
+        }
+    }
+}
 
-// filter 6 : Rotate images
 
-void rotate_image(Image &image,string &filename,int choice){
+// Filter 6: Rotate images 
+void rotate_image(Image &image, string &filename, int choice) {
     Image rotated;
-
-    if (choice == 1 || choice == 3) {
+    
+    if (choice == 1 || choice == 3) { // 90° or 270° rotation
         rotated = Image(image.height, image.width); 
-    } else {
+    } else { 
         rotated = Image(image.width, image.height);
     }
 
     for (int i = 0; i < image.width; i++) {
         for (int j = 0; j < image.height; j++) {
             for (int k = 0; k < 3; k++) {
-                if (choice == 1) {
+                if (choice == 1) { // 90° 
                     rotated(j, image.width - 1 - i, k) = image(i, j, k);
-                } else if (choice == 2) {
+                } else if (choice == 2) { // 180°
                     rotated(image.width - 1 - i, image.height - 1 - j, k) = image(i, j, k);
-                } else if (choice == 3) {
+                } else if (choice == 3) { // 270° 
                     rotated(image.height - 1 - j, i, k) = image(i, j, k);
                 }
             }
         }
     }
-
+        image = rotated; 
 }
 
 //helper function for saving after each filter
@@ -194,20 +203,21 @@ string current;
         switch (choice)
  {
  case 1:{
-   cout <<"Do you want to save the current image? enter yes or no\n";
-   string s;
-   cin >>s; 
-   for (char &c:s) c=tolower(c);
-   if(s == "yes") {
-   image.saveImage(current);
-   cout <<"Image saved in"<< current<<endl;
-   }
-   cout <<"enter new image's name to load\n";
-   string newfile;
-   cin>>newfile ;
-   Image image(newfile);
-   current = newfile;
-   break;}
+    cout <<"Do you want to save the current image? enter yes or no\n";
+    string s;
+    cin >> s; 
+    for (char &c : s) c = tolower(c);
+    if(s == "yes") {
+        image.saveImage(current);
+        cout << "Image saved in " << current << endl;
+    }
+    cout << "enter new image's name to load\n";
+    string newfile;
+    cin >> newfile;
+    image = Image(newfile); // Use assignment, not local declaration
+    current = newfile;
+    break;
+}
 
   case 2:{
     save(image,current);
