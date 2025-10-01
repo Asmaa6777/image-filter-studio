@@ -214,7 +214,7 @@ string current;
     cout << "enter new image's name to load\n";
     string newfile;
     cin >> newfile;
-    image = Image(newfile); // Use assignment, not local declaration
+    image = Image(newfile); 
     current = newfile;
     break;
 }
