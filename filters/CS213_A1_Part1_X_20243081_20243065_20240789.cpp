@@ -41,7 +41,7 @@ void BlackandWhite(Image &image,string &filename){
           int gray = (image(x, y, 0)+image(x, y, 1) + image(x, y, 2))/3;
           sum +=gray;   
         }
-   
+
     }
       int midpoint = sum/(image.width*image.height);
     for (int x = 0; x < image.width; x++) {
@@ -66,7 +66,7 @@ void BlackandWhite(Image &image,string &filename){
         for (int j = 0; j < image.height; ++j) {
             for (int k = 0; k < 3; ++k) {
                 image(i,j,k)= 255 - image(i,j,k);
-                
+
                }
             }      
         }}
@@ -99,12 +99,12 @@ Image merge(Image &image1,string &file1,Image &image2,string &file2){
     }
 return mergedImage;
 }
-        
-  
+
+
 // Filter 5: flip images 
 void flip_image(Image &image, string &filename, int type) {
     Image flipped(image.width, image.height);
-    
+
     if (type == 1) { 
         for (int i = 0; i < image.width; i++) {
             for (int j = 0; j < image.height; j++) {
@@ -130,13 +130,12 @@ void flip_image(Image &image, string &filename, int type) {
 // Filter 6: Rotate images 
 void rotate_image(Image &image, string &filename, int choice) {
     Image rotated;
-    
+
     if (choice == 1 || choice == 3) { // 90° or 270° rotation
         rotated = Image(image.height, image.width); 
     } else { 
         rotated = Image(image.width, image.height);
     }
-
     for (int i = 0; i < image.width; i++) {
         for (int j = 0; j < image.height; j++) {
             for (int k = 0; k < 3; k++) {
@@ -163,7 +162,7 @@ void Darken_Lighten_Image(Image &image,string &filename,string answer){
                 if (image (i,j,k)>255){
                     image(i,j,k)=255; }
                 }
-               
+
                }
             }      
         } 
@@ -174,13 +173,12 @@ void Darken_Lighten_Image(Image &image,string &filename,string answer){
                 image(i,j,k)= 0.5 * image(i,j,k);
                 if (image (i,j,k)<0){
                     image(i,j,k)=0; }
-                
+
                }
             }      
         }
     }
 }
-
 //filter 8 : crop images
 void crop(Image &image,string &filename,long x, long y, long w, long h){
     Image cropped(w, h);
@@ -197,11 +195,11 @@ void frame(Image &image,string &filename,int c)
     int width = image.width;
     int height = image.height;
     int frameThickness = max(1, int(width * 0.05));
- 
+
 if (c ==1){
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            bool inFrame = (y < frameThickness || y >= height - frameThickness ||
+            bool inFrame = (y < frameThickness  y >= height - frameThickness 
                             x < frameThickness || x >= width - frameThickness);
             if (inFrame) {
                 image(y, x, 0) = 180;
@@ -265,11 +263,59 @@ if (c ==1){
 
 
 //filter 10: Detect Image Edges
+void detect_edge(Image &image, string &filenane){
+ BlackandWhite(Image &image,string &filename);
+ Image edges(image.width, image.height);
+
+for (int x=0;x<image.width-1;x++){
+    for (int y=0; y<image.height-1;y++){
+        int current = image(x, y, 0);
+        int right = image(x+1, y, 0);
+        int down = image(x, y+1, 0);
+        if (current!= right || current != down)
+            edges(x, y, 0) = edges(x, y, 1) = edges(x, y, 2) = 0; 
+        else
+            edges(x, y, 0) = edges(x, y, 1) = edges(x, y, 2) = 255; 
+    }
+
+}
+}
 
 // filter 11 : resize
+  
+  Image resize(Image &image, string &filename, int type){
+   int neww,newh;
+    if (type==1){
+    cout << "Enter new width\n ";
+    cin >> neww;
+    cout << "Enter new height\n "; 
+    cin >>  newh;
+ } 
+  else if (type == 2) {
+        double ratio;
+        cout << "Enter ratio ";
+        cin >> ratio;
+        neww= int(image.width * ratio);
+        newh = int(image.height * ratio);
+    }
+  else {
+    cout <<"invalid entry ,try again\n";
+}
+Image resized(neww,newh);
 
-//filter 12:: Blur Images
+    for (int i = 0; i < neww; ++i) {
+        for (int j = 0; j < newh; ++j) {
+        int x =int(double(i*image.width/neww));  
+        int y = int(double(j*image.height/newh));  
+            for (int k = 0; k < 3; ++k) {
+                 resized(i, j, k)=image(x,y,k);
+            }
+        }
+    }
 
+    return resized;}
+
+//filter 12: Blur Images
 
 //helper function for saving after each filter
 void save(Image &image, string &filename) {
@@ -277,13 +323,13 @@ void save(Image &image, string &filename) {
     string s;
     cin >> s;
     for (char &c : s) c = tolower(c);
-    
+
     if (s== "yes") {
         cout << "Do you want to save it in the same file? enter yes or no\n";
         string same;
         cin >> same;
         for (char &c : same) c = tolower(c);
-        
+
         if (same == "yes") {
             image.saveImage(filename);
             cout << "Image saved in " << filename << endl;
@@ -351,7 +397,7 @@ string current;
     invert_image(image,current);
     save(image,current);
    break;}
-   
+
    case 6:{
     image=merge(image,current);
     save(image,current);
@@ -365,7 +411,7 @@ string current;
     save(image,current);
     break;}
 
-   case 8:{
+case 8:{
     cout<<"Do you want to rotate the image 90=1 /180=2/270=3?\n";
     int angle;
     cin >>angle;
@@ -393,7 +439,7 @@ string current;
         crop(image,current,x,y,w,h);
         save(image,current);
    break;}
- 
+
     case 11:{
     int c;
     cout << "Choose frame style:\n";
@@ -402,16 +448,32 @@ string current;
     cout << "Enter choice: ";
     cin >> c;
     frame (image,current,c);
+     save(image,current);
+   break;
    }
-   
 
-   
+   case 12:{
+      
+   }
+
+   case 13:
+   {
+    cout << "Pls enter 1 for resizing with new dimensions and 2 for a ratio of increase or decrease\n";
+    cin >> type; 
+    image = resize(image,current,type);
+   save(image,current);
+   break;
+   }
+
+
+
+
 
    case 17:{
     save(image,current);
     running=false;
    break;}
- 
+
  default:
  cout <<"Invalid input try again!\n";
     break;
