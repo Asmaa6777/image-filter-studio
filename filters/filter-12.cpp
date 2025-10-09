@@ -29,21 +29,3 @@ void blurImage(Image &real, Image &output) {
     }
 }
 
-int main() {
-    string filename;
-    cout << "Enter image name: ";
-    cin >> filename;
-
-    Image image(filename);
-    Image result(image.width, image.height);  // separate output
-
-    blurImage(image, result);  // ✅ now it handles all pixels itself
-
-    string out;
-    cout << "Enter output image name: ";
-    cin >> out;
-    result.saveImage(out);
-
-    cout << "Blur filter applied and saved as " << out << endl;
-    return 0;
-}
