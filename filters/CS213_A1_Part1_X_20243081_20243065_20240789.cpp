@@ -23,7 +23,6 @@ void grayscale(Image &image,string &filename){
             for (int k = 0; k < 3; ++k) {
                 avg += image(i, j, k);  
             }
-
             avg /= 3; 
             image(i, j, 0) = avg;
             image(i, j, 1) = avg;
@@ -41,7 +40,6 @@ void BlackandWhite(Image &image,string &filename){
           int gray = (image(x, y, 0)+image(x, y, 1) + image(x, y, 2))/3;
           sum +=gray;   
         }
-
     }
       int midpoint = sum/(image.width*image.height);
     for (int x = 0; x < image.width; x++) {
@@ -191,7 +189,7 @@ void crop(Image &image,string &filename,long x, long y, long w, long h){
     }
 
 // filter 9 : add frame to images
-void frame(Image &image,string &filename,int c)
+void frame(Image &image,string &filename,int c){
     int width = image.width;
     int height = image.height;
     int frameThickness = max(1, int(width * 0.05));
@@ -208,7 +206,7 @@ if (c ==1){
             }
         }
     }
-}
+}}
     if (c == 2) {
         int spacing = max(10, frameThickness * 2);
         int decoSize = 4;
@@ -316,6 +314,69 @@ Image resized(neww,newh);
     return resized;}
 
 //filter 12: Blur Images
+
+void blurImage(Image &real, Image &output) {
+    for (int y = 0; y < real.height; ++y) {
+        for (int x = 0; x < real.width; ++x) {
+            int SR = 0, SG = 0, SB = 0;
+            int count = 0;
+
+            for (int dy = -5; dy <= 5; ++dy) {
+                for (int dx = -5; dx <= 5; ++dx) {
+                    int nx = x + dx;
+                    int ny = y + dy;
+
+                    if (nx >= 0 && nx < real.width && ny >= 0 && ny < real.height) {
+                        SR += real(nx, ny, 0);
+                        SG += real(nx, ny, 1);
+                        SB += real(nx, ny, 2);
+                        count++;
+                    }
+                }
+            }
+
+            output(x, y, 0) = SR / count;
+            output(x, y, 1) = SG / count;
+            output(x, y, 2) = SB / count;
+        }
+    }
+}
+
+//filter 13 sunlight effect 
+ void sunlight(Image &image,string &filename){
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+           int r=int(image(i, j, 0)*1.3);
+           int g=int(image(i, j, 1) * 0.95);
+           int b=int(image(i, j, 2) * 0.75);
+           image(i, j, 0) =min(r,255);
+           image(i, j, 1) = min(g,255);
+           image(i, j, 2) = min(b,255);
+
+    }}}
+
+//filter 14 : infrared effect:
+
+void infraredFilter(Image &fi, Image &ci) {
+    for (int y = 0; y < fi.height; ++y) {
+        for (int x = 0; x < fi.width; ++x) {
+            int r = fi(x, y, 0);
+            int g = fi(x, y, 1);
+            int b = fi(x, y, 2);
+
+            int avg = (r + g + b) / 3;
+
+            int newR = min(255, avg + 100);
+            int newG = max(0, avg - 50);
+            int newB = max(0, avg - 50);
+
+            ci(x, y, 0) = newR;
+            ci(x, y, 1) = newG;
+            ci(x, y, 2) = newB;
+        }
+    }
+}
+
 
 //helper function for saving after each filter
 void save(Image &image, string &filename) {
@@ -448,35 +509,50 @@ case 8:{
     cout << "Enter choice: ";
     cin >> c;
     frame (image,current,c);
-     save(image,current);
+    save(image,current);
    break;
    }
 
    case 12:{
-      
+    detect_edge(image,current,c);
+    save(image,current);
+   break;
    }
-
-   case 13:
-   {
+   case 13:{
     cout << "Pls enter 1 for resizing with new dimensions and 2 for a ratio of increase or decrease\n";
     cin >> type; 
     image = resize(image,current,type);
-   save(image,current);
+    save(image,current);
+    break;
+   }
+   case 14: {
+    blurImage(Image,current);
+    save(image,current);
    break;
    }
+   case 15:
+   {
+    sunlight(Image,current);
+    save(image,current);
+    break; 
+   }
+   case 16:
+   {
 
-
-
-
-
+    save(image,current);
+    break;
+   }
    case 17:{
     save(image,current);
     running=false;
-   break;}
+   break;
+}
 
- default:
+ default:{
  cout <<"Invalid input try again!\n";
-    break;
+    break;   
+ }
+ 
  }
  }
 }
