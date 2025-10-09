@@ -235,3 +235,4 @@ Image resized(neww,newh);
     }
     image=resized;
 }
+
