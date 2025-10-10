@@ -1,4 +1,4 @@
-/** OOP Assignment 1 Phase 1
+/** OOP Assignment 1 Phase 2
  * FCAI Cairo University
  * contains the menu for 14 filters ,image loading and saving options.
  * Course Instructor: Dr Mohamed El-Ramely ,
@@ -73,55 +73,36 @@ void BlackandWhite(Image &image){
                }
             }      
         }}
-// filter 11 : resize
-// i put it  here because it is used in the next filter (merge filter)
-Image resize(Image &image,int neww,int newh) {
 
-Image resized(neww,newh);
-
-    for (int i = 0; i < neww; ++i) {
-        for (int j = 0; j < newh; ++j) {
-        int x =int(double(i*image.width/neww));  
-        int y = int(double(j*image.height/newh));  
-            for (int k = 0; k < 3; ++k) {
-                 resized(i, j, k)=image(x,y,k);
-            }
-        }
-    }
-
-    return resized;
-}
 //filter 4: Merge images
+Image merge(Image &image1,Image &image2){
 
-Image merge(Image &image1, Image &image2, int option) {
-    Image resized1, resized2;
-    int mergedWidth, mergedHeight;
-
-    if (option == 1) {       
-        mergedWidth = max(image1.width, image2.width);
-        mergedHeight = max(image1.height, image2.height);
-        resized1 = resize(image1, mergedWidth, mergedHeight);
-        resized2 = resize(image2, mergedWidth, mergedHeight);
-    }
-    else if (option == 2) {
-      
-        mergedWidth = min(image1.width, image2.width);
-        mergedHeight = min(image1.height, image2.height);
-        resized1 = image1;
-        resized2 = image2;
-    }
+    int mergedWidth= max(image1.width, image2.width);
+    int mergedHeight= max(image1.height, image2.height);
 
     Image mergedImage(mergedWidth, mergedHeight);
-    for (int i = 0; i < mergedWidth; i++) {
-        for (int j = 0; j < mergedHeight; j++) {
-            for (int k = 0; k < 3; k++) {
-                int avg = (resized1(i, j, k) + resized2(i, j, k)) / 2;
-                mergedImage(i, j, k) = avg;
+    for (int i=0;i<mergedWidth;i++){
+        for (int j=0;j<mergedHeight;j++){
+            for (int k= 0;k<3;k++){
+                int pixels=0;
+                int count= 0;
+
+                if (i<image1.width && j<image1.height){
+                    pixels+=image1(i, j, k);
+                    count++;
+                }
+                if (i<image2.width && j<image2.height){
+                    pixels+=image2(i, j, k);
+                    count++;
+                }
+
+                mergedImage(i, j, k) = (count!=0) ? pixels/count: 0;
             }
         }
     }
-    return mergedImage;
+return mergedImage;
 }
+
 
 // Filter 5: flip images 
 void flip_image(Image &image, int type) {
@@ -302,6 +283,41 @@ for (int x=0;x<image.width-1;x++){
  image = edges;
 }
 
+// filter 11 : resize
+  
+  Image resize(Image &image, int type){
+   int neww,newh;
+    if (type==1){
+    cout << "Enter new width\n ";
+    cin >> neww;
+    cout << "Enter new height\n "; 
+    cin >>  newh;
+ } 
+  else if (type == 2) {
+        double ratio;
+        cout << "Enter ratio ";
+        cin >> ratio;
+        neww= int(image.width * ratio);
+        newh = int(image.height * ratio);
+    }
+  else {
+    cout <<"invalid entry ,try again\n";
+}
+Image resized(neww,newh);
+
+    for (int i = 0; i < neww; ++i) {
+        for (int j = 0; j < newh; ++j) {
+        int x =int(double(i*image.width/neww));  
+        int y = int(double(j*image.height/newh));  
+            for (int k = 0; k < 3; ++k) {
+                 resized(i, j, k)=image(x,y,k);
+            }
+        }
+    }
+
+    return resized;
+}
+
 //filter 12: Blur Images
 
 void blurImage(Image &real, Image &output) {
@@ -451,10 +467,7 @@ string current;
     string file2;
     cin >> file2;
     Image image2(file2);
-    int opt;
-    cout <<"enter 1 for maximum size merge and 2 for common area merge\n";
-    cin >> opt;
-    image=merge(image,image2,opt);
+    image=merge(image,image2);
     save(image,current);
     break;
    } 
@@ -516,25 +529,8 @@ case 8:{
    case 13:{
     cout << "Pls enter 1 for resizing with new dimensions and 2 for a ratio of increase or decrease\n";
     int type;
-    int neww,newh;
     cin >> type; 
-    if (type==1){
-    cout << "Enter new width\n ";
-    cin >> neww;
-    cout << "Enter new height\n "; 
-    cin >>  newh;
-   }
-    else if (type == 2) {
-        double ratio;
-        cout << "Enter ratio ";
-        cin >> ratio;
-        neww= int(image.width * ratio);
-        newh = int(image.height * ratio);
-    }
-  else {
-    cout <<"invalid entry ,try again\n";
-}
-    image = resize(image,neww,newh);
+    image = resize(image,type);
     save(image,current);
     break;
    }
