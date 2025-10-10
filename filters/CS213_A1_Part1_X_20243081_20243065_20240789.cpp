@@ -1,22 +1,25 @@
 /** OOP Assignment 1 Phase 1
  * FCAI Cairo University
- * contains the menu for filters ,image loading and saving options,
+ * contains the menu for 14 filters ,image loading and saving options.
  * Course Instructor: Dr Mohamed El-Ramely ,
- * @date : 30/9/2025
- * Mariam Sherif - 20240789 (filters 1,7)
- * Arwa Bashier -20243065 (filters 2,5)
- * Asmaa Farouq - 20243081 (filters 3,6)
+ * @date : 10/10/2025
+ * Work breakdown
+ * Mariam Sherif - 20240789 - (filters 1,4,7,10 + the document)
+ * Arwa Bashier -20243065 - (filters 2,5,8,11 + bonus filter 13)
+ * Asmaa Farouq - 20243081 (filters 3,6,9,12 + bonus filter 17+ demo video)
+ * Menu was done by both Asmaa & Arwa
  */
 
 #include <iostream>
 using namespace std;
 #include "Image_Class.h" 
 #include <cctype>
+#include<algorithm>
 
 //functions for filters
 // filter 1: grayscale conversion
 
-void grayscale(Image &image,string &filename){
+void grayscale(Image &image){
     for (int i = 0; i < image.width; ++i) {
         for (int j = 0; j < image.height; ++j) {
             unsigned  int avg = 0;  
@@ -33,7 +36,7 @@ void grayscale(Image &image,string &filename){
 
 //filter 2: black&white conversion:
 
-void BlackandWhite(Image &image,string &filename){
+void BlackandWhite(Image &image){
     long long sum=0;
     for (int x = 0; x < image.width; x++) {
         for (int y = 0; y < image.height; y++) {
@@ -59,7 +62,7 @@ void BlackandWhite(Image &image,string &filename){
   } }
 
 //filter 3: Invert images
-   void invert_image(Image &image,string &filename){
+   void invert_image(Image &image){
     for (int i = 0; i < image.width; ++i) {
         for (int j = 0; j < image.height; ++j) {
             for (int k = 0; k < 3; ++k) {
@@ -70,7 +73,7 @@ void BlackandWhite(Image &image,string &filename){
         }}
 
 //filter 4: Merge images
-Image merge(Image &image1,string &file1,Image &image2,string &file2){
+Image merge(Image &image1,Image &image2){
 
     int mergedWidth= max(image1.width, image2.width);
     int mergedHeight= max(image1.height, image2.height);
@@ -100,7 +103,7 @@ return mergedImage;
 
 
 // Filter 5: flip images 
-void flip_image(Image &image, string &filename, int type) {
+void flip_image(Image &image, int type) {
     Image flipped(image.width, image.height);
 
     if (type == 1) { 
@@ -126,7 +129,7 @@ void flip_image(Image &image, string &filename, int type) {
 
 
 // Filter 6: Rotate images 
-void rotate_image(Image &image, string &filename, int choice) {
+void rotate_image(Image &image, int choice) {
     Image rotated;
 
     if (choice == 1 || choice == 3) { // 90° or 270° rotation
@@ -151,26 +154,23 @@ void rotate_image(Image &image, string &filename, int choice) {
 }
 
 //filter 7 : Adjust brightness
-void Darken_Lighten_Image(Image &image,string &filename,string answer){
-    if(answer=="brighter"){
+void Darken_Lighten_Image(Image &image,int answer){
+    if(answer==1){
     for (int i = 0; i < image.width; ++i) {
         for (int j = 0; j < image.height; ++j) {
             for (int k = 0; k < 3; ++k) {
-                image(i,j,k)= 1.5 * image(i,j,k);
-                if (image (i,j,k)>255){
-                    image(i,j,k)=255; }
+                image(i,j,k)= min(int(1.5*image(i,j,k)),255);
+                  }
                 }
 
                }
             }      
-        } 
-    else if(answer=="darker"){
+        
+    else if(answer==2){
         for (int i = 0; i < image.width; ++i) {
         for (int j = 0; j < image.height; ++j) {
             for (int k = 0; k < 3; ++k) {
-                image(i,j,k)= 0.5 * image(i,j,k);
-                if (image (i,j,k)<0){
-                    image(i,j,k)=0; }
+                image(i,j,k)=max(int(0.5*image(i,j,k)),0);
 
                }
             }      
@@ -178,7 +178,7 @@ void Darken_Lighten_Image(Image &image,string &filename,string answer){
     }
 }
 //filter 8 : crop images
-void crop(Image &image,string &filename,long x, long y, long w, long h){
+void crop(Image &image,long x, long y, long w, long h){
     Image cropped(w, h);
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
@@ -189,15 +189,15 @@ void crop(Image &image,string &filename,long x, long y, long w, long h){
     }
 
 // filter 9 : add frame to images
-void frame(Image &image,string &filename,int c){
+void frame(Image &image,int c){
     int width = image.width;
     int height = image.height;
     int frameThickness = max(1, int(width * 0.05));
 
-if (c ==1){
+
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            bool inFrame = (y < frameThickness  y >= height - frameThickness 
+            bool inFrame = (y < frameThickness || y >= height - frameThickness ||
                             x < frameThickness || x >= width - frameThickness);
             if (inFrame) {
                 image(y, x, 0) = 180;
@@ -206,7 +206,7 @@ if (c ==1){
             }
         }
     }
-}}
+
     if (c == 2) {
         int spacing = max(10, frameThickness * 2);
         int decoSize = 4;
@@ -259,10 +259,11 @@ if (c ==1){
         }
     }
 
+}
 
 //filter 10: Detect Image Edges
-void detect_edge(Image &image, string &filenane){
- BlackandWhite(Image &image,string &filename);
+void detect_edge(Image &image){
+ BlackandWhite(image);
  Image edges(image.width, image.height);
 
 for (int x=0;x<image.width-1;x++){
@@ -281,7 +282,7 @@ for (int x=0;x<image.width-1;x++){
 
 // filter 11 : resize
   
-  Image resize(Image &image, string &filename, int type){
+  Image resize(Image &image, int type){
    int neww,newh;
     if (type==1){
     cout << "Enter new width\n ";
@@ -311,7 +312,8 @@ Image resized(neww,newh);
         }
     }
 
-    return resized;}
+    return resized;
+}
 
 //filter 12: Blur Images
 
@@ -379,6 +381,7 @@ void infraredFilter(Image &fi, Image &ci) {
 
 
 //helper function for saving after each filter
+
 void save(Image &image, string &filename) {
     cout << "Do you want to save the current image? yes or no\n";
     string s;
@@ -403,6 +406,7 @@ void save(Image &image, string &filename) {
         }
     }
 }
+
 int main(){
 string current;
  cout << "Pls enter image's name to start\n";
@@ -411,27 +415,23 @@ string current;
  bool running=true;
 
   while (running) {
+
     cout << "\nPlease choose one of the following options by entering the corresponding number\n";
-    cout << "1- Load a new image\n2- Save current image\n3- Filter 1 // Gray scale conversion\n";
-    cout << "4- Filter 2 // Black & White\n5- Filter 3 // Invert Filter\n";
-    cout << "6- Filter 4 // merge Image\n7- Filter 5 // Flip Images\n";
-    cout << "8- Filter 6 // Rotate\n9- Filter 7 // Lighten or darken image\n  10- Filter 8 // crop\n" 
-    cout << "11- Filter 9 // add frame\n12- Filter 10 // detect iamge edges\n13- Filter 11 // resize\n"
-    cout << "14-Filter 12 // Blur\n15- Filter 13 // Sunlight effect\n16- Filter 14 // infrared\n17- Exit\n";
+    cout << "1-Load a new image\n2-Save current image\n3-Filter 1 // Gray scale conversion\n";
+    cout << "4-Filter 2 // Black & White\n5-Filter 3 // Invert Filter\n";
+    cout << "6-Filter 4 // merge Image\n7-Filter 5 // Flip Images\n";
+    cout << "8-Filter 6 // Rotate\n9-Filter 7 // Lighten or darken image\n";
+    cout << "10-Filter 8 // crop\n11-Filter 9 // add frame\n";
+    cout << "12-Filter 10 // detect iamge edges\n13-Filter 11 // resize\n";
+    cout << "14-Filter 12 // Blur\n15-Filter 13 // Sunlight effect\n";
+    cout << "16-Filter 14 // infrared\n17-7Exit\n";
 
         int choice;
         cin >> choice;
         switch (choice)
  {
  case 1:{
-    cout <<"Do you want to save the current image? enter yes or no\n";
-    string s;
-    cin >> s; 
-    for (char &c : s) c = tolower(c);
-    if(s == "yes") {
-        image.saveImage(current);
-        cout << "Image saved in " << current << endl;
-    }
+    save(image,current);
     cout << "enter new image's name to load\n";
     string newfile;
     cin >> newfile;
@@ -445,22 +445,26 @@ string current;
    break;}
 
    case 3:{
-   grayscale(image,current);
+   grayscale(image);
    save(image,current);
    break;}
 
    case 4:{
-    BlackandWhite(image,current);
+    BlackandWhite(image);
     save(image,current);
    break;}
 
    case 5:{
-    invert_image(image,current);
+    invert_image(image);
     save(image,current);
    break;}
 
    case 6:{
-    image=merge(image,current);
+    cout <<"please enter the second image that you want to merge with the current image\n";\
+    string file2;
+    cin >> file2;
+    Image image2(file2);
+    image=merge(image,image2);
     save(image,current);
     break;
    } 
@@ -468,7 +472,7 @@ string current;
     cout<<"Do you want to flip the image horizontally or vertically?horizontal=1, vertical=2\n";
     int s;
     cin >>s;
-    flip_image(image,current);
+    flip_image(image,s);
     save(image,current);
     break;}
 
@@ -476,15 +480,15 @@ case 8:{
     cout<<"Do you want to rotate the image 90=1 /180=2/270=3?\n";
     int angle;
     cin >>angle;
-    rotate_image(image,current, angle);
+    rotate_image(image,angle);
     save(image,current);
    break;}
 
    case 9:{
-    cout <<"Do you want to darker or lighter the image? enter darker or lighter\n";
-    string s;
+    cout <<"Do you want to darken or lighten the image? 1 = lighten, 2 = darken\n";
+    int s;
     cin >>s;
-    Darken_Lighten_Image(image,current, s);
+    Darken_Lighten_Image(image,s);
     save(image,current);
    break;}
   case 10:{
@@ -497,7 +501,7 @@ case 8:{
         cin >> w;
         cout << "Enter height of crop:\n ";
         cin >> h;   
-        crop(image,current,x,y,w,h);
+        crop(image,x,y,w,h);
         save(image,current);
    break;}
 
@@ -508,37 +512,42 @@ case 8:{
     cout << "2 => Frame with simple زخارف decoration\n";
     cout << "Enter choice: ";
     cin >> c;
-    frame (image,current,c);
+    frame (image,c);
     save(image,current);
    break;
    }
 
    case 12:{
-    detect_edge(image,current,c);
+    detect_edge(image);
     save(image,current);
    break;
    }
    case 13:{
     cout << "Pls enter 1 for resizing with new dimensions and 2 for a ratio of increase or decrease\n";
+    int type;
     cin >> type; 
-    image = resize(image,current,type);
+    image = resize(image,type);
     save(image,current);
     break;
    }
    case 14: {
-    blurImage(Image,current);
+    Image output(image.width,image.height);
+    blurImage(image,output);
+    image=output; 
     save(image,current);
    break;
    }
    case 15:
    {
-    sunlight(Image,current);
+    sunlight(image);
     save(image,current);
     break; 
    }
    case 16:
    {
-
+    Image result(image.width,image.height);
+    infraredFilter(image,result);
+    image=result;
     save(image,current);
     break;
    }
