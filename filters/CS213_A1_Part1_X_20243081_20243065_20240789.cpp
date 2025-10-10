@@ -1,4 +1,4 @@
-/** OOP Assignment 1 Phase 1
+/** OOP Assignment 1 Phase 2
  * FCAI Cairo University
  * contains the menu for 14 filters ,image loading and saving options.
  * Course Instructor: Dr Mohamed El-Ramely ,
