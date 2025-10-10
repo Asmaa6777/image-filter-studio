@@ -15,6 +15,8 @@ using namespace std;
 #include "Image_Class.h" 
 #include <cctype>
 #include<algorithm>
+#include <cmath>    
+#include <string>   
 
 //functions for filters
 // filter 1: grayscale conversion
@@ -278,6 +280,7 @@ for (int x=0;x<image.width-1;x++){
     }
 
 }
+ image = edges;
 }
 
 // filter 11 : resize
@@ -345,7 +348,7 @@ void blurImage(Image &real, Image &output) {
 }
 
 //filter 13 sunlight effect 
- void sunlight(Image &image,string &filename){
+ void sunlight(Image &image){
     for (int i = 0; i < image.width; i++) {
         for (int j = 0; j < image.height; j++) {
            int r=int(image(i, j, 0)*1.3);
@@ -424,7 +427,7 @@ string current;
     cout << "10-Filter 8 // crop\n11-Filter 9 // add frame\n";
     cout << "12-Filter 10 // detect iamge edges\n13-Filter 11 // resize\n";
     cout << "14-Filter 12 // Blur\n15-Filter 13 // Sunlight effect\n";
-    cout << "16-Filter 14 // infrared\n17-7Exit\n";
+    cout << "16-Filter 14 // infrared\n17-Exit\n";
 
         int choice;
         cin >> choice;
@@ -492,14 +495,15 @@ case 8:{
     save(image,current);
    break;}
   case 10:{
-  long x, y, w, h;
-        cout << "Enter starting leftmost point\n ";
+  long x, y, w, h;  
+
+        cout << "Enter starting leftmost point\n (must be positive) ";
         cin >> x;
-        cout << "Enter starting upper point\n ";
+        cout << "Enter starting upper point\n (must be positive) ";
         cin >> y;
-        cout << "Enter width of crop:\n ";
+        cout << "Enter width of crop(keep in mind the image width is : "<< image.width <<endl;
         cin >> w;
-        cout << "Enter height of crop:\n ";
+        cout << "Enter height of crop(keep in mind the image height is : "<< image.height <<endl;
         cin >> h;   
         crop(image,x,y,w,h);
         save(image,current);
