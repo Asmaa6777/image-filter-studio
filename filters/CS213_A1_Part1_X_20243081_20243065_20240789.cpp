@@ -212,20 +212,19 @@ void crop(Image &image,long x, long y, long w, long h){
     }
 
 // filter 9 : add frame to images
-void frame(Image &image,int c){
+ void frame(Image &image, int c) {
     int width = image.width;
     int height = image.height;
     int frameThickness = max(1, int(width * 0.05));
-
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             bool inFrame = (y < frameThickness || y >= height - frameThickness ||
                             x < frameThickness || x >= width - frameThickness);
             if (inFrame) {
-                image(y, x, 0) = 180;
-                image(y, x, 1) = 0;
-                image(y, x, 2) = 120;
+                image(x, y, 0) = 180;
+                image(x, y, 1) = 0;
+                image(x, y, 2) = 120;
             }
         }
     }
@@ -244,14 +243,14 @@ void frame(Image &image,int c){
                         int pyBottom = height - frameThickness / 2 + dy;
 
                         if (px >= 0 && px < width && pyTop >= 0 && pyTop < height) {
-                            image(pyTop, px, 0) = goldR;
-                            image(pyTop, px, 1) = goldG;
-                            image(pyTop, px, 2) = goldB;
+                            image(px, pyTop, 0) = goldR;
+                            image(px, pyTop, 1) = goldG;
+                            image(px, pyTop, 2) = goldB;
                         }
                         if (px >= 0 && px < width && pyBottom >= 0 && pyBottom < height) {
-                            image(pyBottom, px, 0) = goldR;
-                            image(pyBottom, px, 1) = goldG;
-                            image(pyBottom, px, 2) = goldB;
+                            image(px, pyBottom, 0) = goldR;
+                            image(px, pyBottom, 1) = goldG;
+                            image(px, pyBottom, 2) = goldB;
                         }
                     }
                 }
@@ -267,23 +266,21 @@ void frame(Image &image,int c){
                         int pxRight = width - frameThickness / 2 + dx;
 
                         if (pxLeft >= 0 && pxLeft < width && py >= 0 && py < height) {
-                            image(py, pxLeft, 0) = goldR;
-                            image(py, pxLeft, 1) = goldG;
-                            image(py, pxLeft, 2) = goldB;
+                            image(pxLeft, py, 0) = goldR;
+                            image(pxLeft, py, 1) = goldG;
+                            image(pxLeft, py, 2) = goldB;
                         }
                         if (pxRight >= 0 && pxRight < width && py >= 0 && py < height) {
-                            image(py, pxRight, 0) = goldR;
-                            image(py, pxRight, 1) = goldG;
-                            image(py, pxRight, 2) = goldB;
+                            image(pxRight, py, 0) = goldR;
+                            image(pxRight, py, 1) = goldG;
+                            image(pxRight, py, 2) = goldB;
                         }
                     }
                 }
             }
         }
     }
-
 }
-
 //filter 10: Detect Image Edges
 void detect_edge(Image &image){
  BlackandWhite(image);
@@ -502,7 +499,7 @@ case 8:{
     int c;
     cout << "Choose frame style:\n";
     cout << "1 => Simple purple frame\n";
-    cout << "2 => Frame with simple زخارف decoration\n";
+    cout << "2 => Frame with simple decoration\n";
     cout << "Enter choice: ";
     cin >> c;
     frame (image,c);
