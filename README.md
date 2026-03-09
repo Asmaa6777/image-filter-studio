@@ -1,4 +1,4 @@
-# 📸 Image Processing Tool (CS213 – OOP Assignment)
+# Image Filter Studio
 
 This project is an **image processing tool** built in **C++** for CS213: OOP Programming (Assignment 1).
 The program loads an image, allows the user to apply different filters, and then save the processed image.
@@ -55,7 +55,7 @@ Make sure the header file and your image files are in the same directory as your
 ## 📂 Project Structure
 
 ```
-📦 ImageProcessingTool
+📦 ImageFilterStudio
  ┣ 📂 Filters.cpp           # Main menu + program loop
  ┣ 📜 Image_Class.h      # Provided library wrapper
  ┣ 📜 stb_image.h        # Image loading
@@ -145,3 +145,4 @@ Each filter is implemented in a **separate function**.
 * Asmaa Farouq 
 * Arwaa Bashir  
 * Mariam Sherif
+
